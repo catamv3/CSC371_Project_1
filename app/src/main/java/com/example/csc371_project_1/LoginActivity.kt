@@ -19,7 +19,8 @@ class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Wrap screen in ThemeSwitcher for global persistent dark/light mode
+        // Sets up the UI and wraps the screen with ThemeSwitcher
+        // so dark/light mode preference persists across the app
         setContent {
             ThemeSwitcher { _ ->
                 LoginScreen(this)
@@ -30,10 +31,12 @@ class LoginActivity : ComponentActivity() {
 
 @Composable
 fun LoginScreen(activity: ComponentActivity) {
+    // State variables for user input and error messages
     var email by remember { mutableStateOf("") }
     var pass by remember { mutableStateOf("") }
     var error by remember { mutableStateOf("") }
 
+    // Main layout for the login screen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,6 +44,7 @@ fun LoginScreen(activity: ComponentActivity) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Title text
         Text(
             "Login",
             style = MaterialTheme.typography.headlineMedium,
@@ -49,6 +53,7 @@ fun LoginScreen(activity: ComponentActivity) {
 
         Spacer(Modifier.height(16.dp))
 
+        // Email input field
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -56,6 +61,7 @@ fun LoginScreen(activity: ComponentActivity) {
             modifier = Modifier.fillMaxWidth()
         )
 
+        // Password input field
         OutlinedTextField(
             value = pass,
             onValueChange = { pass = it },
@@ -66,8 +72,10 @@ fun LoginScreen(activity: ComponentActivity) {
 
         Spacer(Modifier.height(16.dp))
 
+        // Login button with validation and navigation logic
         Button(
             onClick = {
+                // Retrieve stored user data from SharedPreferences
                 val prefs = activity.getSharedPreferences("user_data", Context.MODE_PRIVATE)
                 val storedEmail = prefs.getString("email", null)
                 val storedPass = prefs.getString("pass", null)
@@ -75,12 +83,14 @@ fun LoginScreen(activity: ComponentActivity) {
                 val last = prefs.getString("last", "")
                 val dob = prefs.getString("dob", "")
 
+                // Validate login credentials
                 when {
                     email.isBlank() || pass.isBlank() ->
                         error = "Please enter both email and password"
                     !Patterns.EMAIL_ADDRESS.matcher(email).matches() ->
                         error = "Invalid email format"
                     email == storedEmail && pass == storedPass -> {
+                        // If valid, navigate to LandingActivity and pass user data
                         val intent = Intent(activity, LandingActivity::class.java).apply {
                             putExtra("first", first)
                             putExtra("last", last)
@@ -98,6 +108,7 @@ fun LoginScreen(activity: ComponentActivity) {
             Text("Login")
         }
 
+        // Display error message if login fails
         if (error.isNotEmpty()) {
             Spacer(Modifier.height(8.dp))
             Text(

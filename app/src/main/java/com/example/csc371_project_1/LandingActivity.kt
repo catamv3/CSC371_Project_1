@@ -30,7 +30,7 @@ class LandingActivity : ComponentActivity() {
         val email = intent.getStringExtra("email") ?: ""
         val pass = intent.getStringExtra("pass") ?: ""
 
-        // ✅ Apply persistent theme via ThemeSwitcher
+        // Apply persistent theme via ThemeSwitcher
         setContent {
             ThemeSwitcher { _ ->
                 LandingScreen(
@@ -72,7 +72,7 @@ fun LandingScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            // 🧑 Profile Section
+            // Profile Section
             Spacer(Modifier.height(20.dp))
             Box(contentAlignment = Alignment.Center) {
                 // Replace with a real image if you want
@@ -98,7 +98,7 @@ fun LandingScreen(
                 textAlign = TextAlign.Center
             )
 
-            // 🪪 Info Card
+            //Info Card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -144,7 +144,7 @@ fun LandingScreen(
     }
 }
 
-// 🔹 Helper Composable for uniform info display
+// Helper Composable for uniform info display
 @Composable
 fun InfoRow(label: String, value: String) {
     Column(Modifier.fillMaxWidth()) {

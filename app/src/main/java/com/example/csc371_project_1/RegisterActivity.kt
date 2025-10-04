@@ -20,7 +20,7 @@ class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Wrap the screen in ThemeSwitcher to apply persistent theme
+        // Wraps this screen in ThemeSwitcher to apply the user's selected theme mode
         setContent {
             ThemeSwitcher { _ ->
                 RegisterScreen(this)
@@ -31,8 +31,10 @@ class RegisterActivity : ComponentActivity() {
 
 @Composable
 fun RegisterScreen(activity: ComponentActivity) {
+    // Accesses the current context for saving user data and showing messages
     val ctx = LocalContext.current
 
+    // State variables for storing user input and error messages
     var first by remember { mutableStateOf("") }
     var last by remember { mutableStateOf("") }
     var dob by remember { mutableStateOf("") }
@@ -40,6 +42,7 @@ fun RegisterScreen(activity: ComponentActivity) {
     var pass by remember { mutableStateOf("") }
     var error by remember { mutableStateOf("") }
 
+    // Layout for registration fields and submit button
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,6 +50,7 @@ fun RegisterScreen(activity: ComponentActivity) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Screen title
         Text(
             "Register",
             style = MaterialTheme.typography.headlineMedium,
@@ -55,6 +59,7 @@ fun RegisterScreen(activity: ComponentActivity) {
 
         Spacer(Modifier.height(16.dp))
 
+        // Input fields for user data
         OutlinedTextField(
             value = first,
             onValueChange = { first = it },
@@ -89,9 +94,11 @@ fun RegisterScreen(activity: ComponentActivity) {
 
         Spacer(Modifier.height(16.dp))
 
+        // Button to validate inputs and save data if successful
         Button(
             onClick = {
                 when {
+                    // Validation checks for empty or incorrect fields
                     first.isBlank() || last.isBlank() || dob.isBlank() || email.isBlank() || pass.isBlank() ->
                         error = "All fields are required"
                     first.length < 3 || first.length > 30 ->
@@ -101,6 +108,7 @@ fun RegisterScreen(activity: ComponentActivity) {
                     pass.length < 6 ->
                         error = "Password must be at least 6 characters"
                     else -> {
+                        // Save user data to SharedPreferences
                         val prefs = ctx.getSharedPreferences("user_data", Context.MODE_PRIVATE)
                         with(prefs.edit()) {
                             putString("first", first)
@@ -111,6 +119,7 @@ fun RegisterScreen(activity: ComponentActivity) {
                             apply()
                         }
 
+                        // Show success message and return to main screen
                         Toast.makeText(ctx, "Registration successful!", Toast.LENGTH_SHORT).show()
                         activity.finish()
                     }
@@ -121,6 +130,7 @@ fun RegisterScreen(activity: ComponentActivity) {
             Text("Create Account")
         }
 
+        // Display error messages if validation fails
         if (error.isNotEmpty()) {
             Spacer(Modifier.height(8.dp))
             Text(

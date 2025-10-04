@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Simply wrap content in ThemeSwitcher for persistent theme support
+        // Wraps the screen in ThemeSwitcher to apply and persist the selected light/dark theme
         setContent {
             ThemeSwitcher { _ ->
                 WelcomeScreen(this)
@@ -27,16 +27,19 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun WelcomeScreen(activity: ComponentActivity) {
+    // Main layout container with padding and centered content
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)
     ) {
+        // Arranges components vertically in the center of the screen
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Displays welcome text at the top
             Text(
                 "Welcome!",
                 style = MaterialTheme.typography.headlineLarge,
@@ -45,6 +48,7 @@ fun WelcomeScreen(activity: ComponentActivity) {
 
             Spacer(Modifier.height(32.dp))
 
+            // Button that navigates to the RegisterActivity
             Button(
                 onClick = {
                     val intent = Intent(activity, RegisterActivity::class.java)
@@ -57,6 +61,7 @@ fun WelcomeScreen(activity: ComponentActivity) {
 
             Spacer(Modifier.height(16.dp))
 
+            // Outlined button that navigates to the LoginActivity
             OutlinedButton(
                 onClick = {
                     val intent = Intent(activity, LoginActivity::class.java)
